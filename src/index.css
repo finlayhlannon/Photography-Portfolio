@@ -93,3 +93,8 @@ img {
   height: auto;
   display: block;
 }
+
+section#contact {
+  min-height: 50vh;
+  padding: 4rem 0;
+}

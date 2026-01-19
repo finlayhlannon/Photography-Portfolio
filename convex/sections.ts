@@ -11,19 +11,19 @@ export const list = query({
     
     return Promise.all(
       sections.map(async (section) => {
-        // Get the most recent photo from this section as preview
-        const recentPhoto = await ctx.db
+        // Get the FIRST photo from this section as preview
+        const firstPhoto = await ctx.db
           .query("photos")
           .withIndex("by_section", (q) => q.eq("sectionId", section._id))
-          .order("desc")
+          .order("asc")
           .first();
         
         return {
           ...section,
           coverImageUrl: section.coverImageId 
             ? await ctx.storage.getUrl(section.coverImageId)
-            : recentPhoto 
-            ? await ctx.storage.getUrl(recentPhoto.imageId)
+            : firstPhoto 
+            ? await ctx.storage.getUrl(firstPhoto.imageId)
             : null,
         };
       })

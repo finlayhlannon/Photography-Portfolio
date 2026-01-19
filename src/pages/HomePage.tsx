@@ -2,6 +2,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import SectionPreview from "../components/SectionPreview";
 import Footer from "../components/Footer";
+import finlayImg from "../components/img/finlay.jpg";
 
 export default function HomePage() {
   const sections = useQuery(api.sections.list) || [];
@@ -44,17 +45,18 @@ export default function HomePage() {
             </p>
           </div>
         </div>
-        <div className="w-1/3 h-3/4 bg-gray-800"></div>
+        <div className="w-1/3 h-3/4 bg-gray-800"><img src={finlayImg} alt="Finlay"/></div>      
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="h-screen flex items-center justify-center bg-gray-900">
+      <section id="contact" className="h-1/2 flex items-center justify-center bg-gray-900">
         <div className="text-center">
           <h2 className="text-4xl font-light mb-8 tracking-wider">Get In Touch</h2>
           <div className="space-y-4">
-            <p className="text-xl text-gray-300">fin.hlannon@outlook.com</p>
-          </div>
-          <div className="mt-8 space-x-6">
+            <a href="mailto:fin.hlannon@outlook.com" className="text-gray-400 hover:text-white transition-colors">
+              Email
+            </a>
+            <br></br>
             <a href="https://www.instagram.com/finlays.camera" className="text-gray-400 hover:text-white transition-colors">
               Instagram
             </a>
