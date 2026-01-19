@@ -37,10 +37,10 @@ export default function Header() {
                 {section.name}
               </Link>
             ))}
-            <a href="#about" className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors">
+            <a href="../#about" className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors">
               About
             </a>
-            <a href="#contact" className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors">
+            <a href="../#contact" className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors">
               Contact
             </a>
           </div>
