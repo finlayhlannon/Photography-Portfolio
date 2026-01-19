@@ -98,3 +98,84 @@ section#contact {
   min-height: 50vh;
   padding: 4rem 0;
 }
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  /* Hide header on mobile */
+  header {
+    display: none !important;
+  }
+
+  /* Hero section - smaller text */
+  section.h-screen h1 {
+    font-size: 2.5rem;
+    padding: 0 1rem;
+  }
+
+  section.h-screen p {
+    font-size: 1.125rem;
+  }
+
+  /* Section previews - hide description and stack vertically */
+  .h-screen.flex.items-center.justify-between {
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+    min-height: 100vh;
+    height: auto;
+  }
+
+  .h-screen.flex .w-1\/3 {
+    display: none; /* Hide description */
+  }
+
+  .h-screen.flex .w-1\/2 {
+    width: 100%;
+    height: 400px;
+  }
+
+  /* About section - stack vertically and remove gray background */
+  section#about {
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+    min-height: 100vh;
+    height: auto;
+  }
+
+  section#about .w-1\/2 {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  section#about .w-1\/3 {
+    width: 100%;
+    height: 300px;
+    background: transparent !important; /* Remove gray background */
+  }
+
+  section#about h2 {
+    font-size: 2rem;
+  }
+
+  section#about .space-y-4 {
+    font-size: 0.95rem;
+  }
+
+  /* Contact section */
+  section#contact {
+    padding: 3rem 1.5rem;
+  }
+
+  section#contact h2 {
+    font-size: 2rem;
+  }
+
+  /* Section titles - always visible on mobile, no hover effects */
+  .h-screen.flex .w-1\/2 a > div:last-child {
+    opacity: 1 !important; /* Always show title overlay */
+  }
+
+  .h-screen.flex .w-1\/2 a img {
+    transform: none !important; /* Disable scale on hover */
+    filter: brightness(0.5) !important; /* Keep image darkened for text readability */
+  }
+}
