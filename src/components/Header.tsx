@@ -28,6 +28,9 @@ export default function Header() {
             FINLAY HLANNON
           </Link>
           <div className="flex space-x-8">
+            <a href="/events" className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors">
+              Events
+            </a>
             {sections.map((section) => (
               <Link
                 key={section._id}

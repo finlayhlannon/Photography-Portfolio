@@ -21,6 +21,13 @@ const applicationTables = {
     order: v.number(),
   }).index("by_section", ["sectionId", "order"]),
   
+  events: defineTable({
+    name: v.string(),
+    link: v.string(),
+    imageId: v.id("_storage"),
+    createdAt: v.number(),
+  }).index("by_created", ["createdAt"]),
+  
   settings: defineTable({
     key: v.string(),
     value: v.string(),

@@ -179,3 +179,46 @@ section#contact {
     filter: brightness(0.5) !important; /* Keep image darkened for text readability */
   }
 }
+
+/* Event Banners */
+.event-banner {
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.event-banner:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+}
+
+.event-banner-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease, filter 0.3s ease;
+  filter: brightness(0.6);
+}
+
+.event-banner:hover .event-banner-image {
+  transform: scale(1.05);
+  filter: brightness(0.4);
+}
+
+/* Mobile event banners */
+@media (max-width: 768px) {
+  .event-banner {
+    aspect-ratio: 1 / 1;
+  }
+
+  .event-banner h2 {
+    font-size: 1.5rem;
+  }
+}

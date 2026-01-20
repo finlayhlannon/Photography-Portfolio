@@ -6,23 +6,28 @@ import { toast } from "sonner";
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
-  const [activeTab, setActiveTab] = useState<"sections" | "photos">("sections");
+  const [activeTab, setActiveTab] = useState<"sections" | "photos" | "events">("sections");
   const [isUploading, setIsUploading] = useState(false);
   
   const authenticate = useMutation(api.admin.authenticate);
   const sections = useQuery(api.sections.list) || [];
+  const events = useQuery(api.events.list) || [];
   const createSection = useMutation(api.sections.create);
   const updateSection = useMutation(api.sections.update);
   const removeSection = useMutation(api.sections.remove);
   const createPhoto = useMutation(api.photos.create);
   const removePhoto = useMutation(api.photos.remove);
+  const createEvent = useMutation(api.events.create);
+  const removeEvent = useMutation(api.events.remove);
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
 
   const [editingSection, setEditingSection] = useState<any>(null);
   const [newSection, setNewSection] = useState({ name: "", description: "", order: 0 });
   const [selectedSectionId, setSelectedSectionId] = useState<string>("");
   const [newPhoto, setNewPhoto] = useState({ title: "", description: "", date: "", order: 0 });
+  const [newEvent, setNewEvent] = useState({ name: "", link: "" });
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const eventFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,6 +123,55 @@ export default function AdminPage() {
     }
   };
 
+  const handleEventCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!eventFileInputRef.current?.files?.[0]) {
+      toast.error("Please select an image");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const file = eventFileInputRef.current.files[0];
+      
+      // Upload image
+      const uploadUrl = await generateUploadUrl();
+      const result = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      
+      const { storageId } = await result.json();
+      
+      // Create event record
+      await createEvent({
+        ...newEvent,
+        imageId: storageId,
+      });
+      
+      setNewEvent({ name: "", link: "" });
+      if (eventFileInputRef.current) eventFileInputRef.current.value = "";
+      toast.success("Event created successfully");
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Failed to create event");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeleteEvent = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this event?")) return;
+    
+    try {
+      await removeEvent({ id: id as any });
+      toast.success("Event deleted");
+    } catch (error) {
+      toast.error("Failed to delete event");
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -163,6 +217,14 @@ export default function AdminPage() {
             }`}
           >
             Photos
+          </button>
+          <button
+            onClick={() => setActiveTab("events")}
+            className={`px-4 py-2 rounded ${
+              activeTab === "events" ? "bg-white text-black" : "bg-gray-800"
+            }`}
+          >
+            Events
           </button>
         </div>
 
@@ -332,6 +394,82 @@ export default function AdminPage() {
                 {isUploading ? "Uploading..." : "Upload Photo"}
               </button>
             </form>
+          </div>
+        )}
+
+        {activeTab === "events" && (
+          <div className="space-y-8">
+            {/* Create Event */}
+            <div className="bg-gray-900 p-6 rounded-lg">
+              <h2 className="text-xl mb-4">Create New Event</h2>
+              <form onSubmit={handleEventCreate} className="space-y-4">
+                <input
+                  type="text"
+                  value={newEvent.name}
+                  onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })}
+                  placeholder="Event name"
+                  className="w-full p-3 bg-gray-800 border border-gray-700 rounded text-white"
+                  required
+                />
+                <input
+                  type="url"
+                  value={newEvent.link}
+                  onChange={(e) => setNewEvent({ ...newEvent, link: e.target.value })}
+                  placeholder="Google Drive link (or any URL)"
+                  className="w-full p-3 bg-gray-800 border border-gray-700 rounded text-white"
+                  required
+                />
+                <input
+                  ref={eventFileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="w-full p-3 bg-gray-800 border border-gray-700 rounded text-white"
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={isUploading}
+                  className="bg-white text-black px-6 py-2 rounded hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isUploading ? "Creating..." : "Create Event"}
+                </button>
+              </form>
+            </div>
+
+            {/* Existing Events */}
+            <div className="space-y-4">
+              <h2 className="text-xl">Existing Events</h2>
+              {events.map((event) => (
+                <div key={event._id} className="bg-gray-900 p-4 rounded-lg flex justify-between items-center">
+                  <div className="flex items-center space-x-4">
+                    {event.imageUrl && (
+                      <img
+                        src={event.imageUrl}
+                        alt={event.name}
+                        className="w-24 h-16 object-cover rounded"
+                      />
+                    )}
+                    <div>
+                      <h3 className="text-lg font-medium">{event.name}</h3>
+                      <a
+                        href={event.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-400 hover:underline"
+                      >
+                        {event.link}
+                      </a>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteEvent(event._id)}
+                    className="bg-red-600 text-white px-3 py-1 rounded text-sm"
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
