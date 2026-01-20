@@ -14,7 +14,7 @@ export default function EventsPage() {
             EVENTS
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl font-light mt-4 tracking-wider text-gray-300">
-            MOMENTS CAPTURED
+            LINKS TO PHOTO FOLDERS
           </p>
         </div>
       </section>
