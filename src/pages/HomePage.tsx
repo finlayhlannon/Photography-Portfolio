@@ -54,7 +54,7 @@ export default function HomePage() {
               )}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <span className="text-3xl font-light tracking-widest uppercase">
-                  View Photos
+                  Event Photos
                 </span>
               </div>
             </a>
