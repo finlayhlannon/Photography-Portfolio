@@ -40,7 +40,7 @@ export default function HomePage() {
           
           <div className="w-1/2 h-3/4 relative">
             <a
-              href={latestEvent.link}
+              href="/events"
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full h-full relative overflow-hidden group"
